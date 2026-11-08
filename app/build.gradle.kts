@@ -22,8 +22,8 @@ android {
         minSdk = 26
         targetSdk = 36
         // Bei jedem Release beide Werte erhöhen. versionName muss zum GitHub-Tag passen (v1.0.0).
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         // Nur 64-Bit-ARM: deckt alle aktuellen Handys ab und hält die APK klein
         ndk { abiFilters += "arm64-v8a" }
