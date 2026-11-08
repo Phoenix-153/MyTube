@@ -1,0 +1,35 @@
+/*
+ * Blendet Shorts auf m.youtube.com aus.
+ *
+ * YouTube ändert seine Seitenstruktur gelegentlich. Tauchen Shorts wieder auf:
+ * in Firefox am PC m.youtube.com öffnen (Entwicklerwerkzeuge → Handy-Ansicht),
+ * das Shorts-Element untersuchen und seinen Tag-Namen hier ergänzen.
+ * content.js blendet zusätzlich alles aus, was auf /shorts verlinkt.
+ */
+
+/* Shorts-Regale (Startseite, Suche, Abos, Kanäle) */
+ytm-reel-shelf-renderer,
+ytm-shorts-lockup-view-model,
+ytm-shorts-lockup-view-model-v2,
+ytm-rich-section-renderer:has(ytm-reel-shelf-renderer),
+ytm-rich-section-renderer:has(ytm-shorts-lockup-view-model),
+ytm-rich-section-renderer:has(ytm-shorts-lockup-view-model-v2),
+grid-shelf-view-model:has(ytm-shorts-lockup-view-model),
+grid-shelf-view-model:has(ytm-shorts-lockup-view-model-v2),
+ytm-item-section-renderer:has(> * > ytm-reel-shelf-renderer),
+
+/* Einzelne Videokarten, die auf ein Short verlinken */
+ytm-video-with-context-renderer:has(a[href^="/shorts/"]),
+ytm-compact-video-renderer:has(a[href^="/shorts/"]),
+ytm-rich-item-renderer:has(a[href^="/shorts/"]),
+ytm-reel-item-renderer,
+
+/* "Shorts" in der unteren Navigationsleiste */
+ytm-pivot-bar-item-renderer:has(.pivot-shorts),
+ytm-pivot-bar-item-renderer:has(a[href="/shorts"]),
+
+/* Shorts-Tab auf Kanalseiten */
+yt-tab-shape[tab-title="Shorts"],
+.single-column-browse-results-tabs a[href$="/shorts"] {
+  display: none !important;
+}

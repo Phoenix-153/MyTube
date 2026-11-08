@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "MyTube Shorts-Blocker",
+  "version": "1.0",
+  "description": "Blendet YouTube Shorts aus und verhindert Klicks darauf.",
+  "browser_specific_settings": {
+    "gecko": { "id": "shorts-blocker@mytube" }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "css": ["content.css"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
