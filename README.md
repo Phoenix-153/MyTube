@@ -62,6 +62,8 @@ ohne die App neu einzurichten.
    Die App findet es automatisch über die GitHub-API.
 
 ### Wartung
+- **Miniplayer zeigt mehr als das Video oder nichts:** YouTube hat den Player umbenannt.
+  `#player-container-id` in `MINI_CSS` in `features.js` anpassen.
 - **Shorts tauchen wieder auf:** YouTube hat die Seite umgebaut. Selektoren in
   `app/src/main/assets/shorts-blocker/content.css` ergänzen (Anleitung steht in der Datei).
 - **GeckoView aktualisieren** (Sicherheitsupdates, etwa alle 1–3 Monate): Version in
@@ -72,7 +74,9 @@ ohne die App neu einzurichten.
 | Datei | Aufgabe |
 |---|---|
 | `App.kt` | Browser-Engine (GeckoRuntime), installiert Shorts-Blocker und uBlock Origin |
-| `MainActivity.kt` | Browser-Bildschirm, Shorts-Sperre, Links, Vollbild, Zurück-Taste |
+| `MainActivity.kt` | Zwei Tabs (Stöbern + Video), Shorts-Sperre, Links, Teilen, Sprachsuche, Vollbild, Zurück-Taste |
+| `PlayerLayout.kt` | Video-Ebene: bildschirmfüllend oder Miniplayer-Leiste, Wischgeste |
 | `OnboardingActivity.kt` | Einrichtungsassistent beim ersten Start |
 | `Updater.kt` | Update-Prüfung über GitHub Releases |
-| `assets/shorts-blocker/` | Erweiterung, die Shorts ausblendet und Klicks abfängt |
+| `assets/shorts-blocker/content.*` | Erweiterung: blendet Shorts aus und fängt Klicks ab |
+| `assets/shorts-blocker/features.js` | Erweiterung: Pull-to-refresh, Mikrofon-Knopf, Miniplayer-Steuerung |

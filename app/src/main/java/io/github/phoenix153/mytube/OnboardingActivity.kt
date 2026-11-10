@@ -19,7 +19,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 /**
- * Einrichtungsassistent beim ersten Start (3 Schritte). Die Oberfläche wird im Code gebaut,
+ * Einrichtungsassistent beim ersten Start (3 Schritte, 2 wenn die YouTube-App fehlt oder
+ * schon deaktiviert ist). Die Oberfläche wird im Code gebaut,
  * damit keine zusätzlichen Layout-Dateien nötig sind.
  */
 class OnboardingActivity : ComponentActivity() {
@@ -31,9 +32,10 @@ class OnboardingActivity : ComponentActivity() {
         val action: (() -> Unit)? = null,
     )
 
-    private val youtubeInstalled by lazy {
+    /** YouTube-App installiert UND noch nicht deaktiviert? */
+    private val youtubeActive by lazy {
         try {
-            packageManager.getPackageInfo(YOUTUBE_PACKAGE, 0); true
+            packageManager.getApplicationInfo(YOUTUBE_PACKAGE, 0).enabled
         } catch (_: PackageManager.NameNotFoundException) {
             false
         }
@@ -54,7 +56,7 @@ class OnboardingActivity : ComponentActivity() {
                     "Links öffnen“) und hake alle YouTube-Adressen an.",
                 "Einstellungen öffnen",
             ) { openLinkSettings() },
-            if (youtubeInstalled) Step(
+            if (youtubeActive) Step(
                 "YouTube-App deaktivieren",
                 "Damit du nicht aus Gewohnheit doch die Shorts-App öffnest:\n\n" +
                     "Tippe unten auf den Knopf und dann auf „Deaktivieren“. Das lässt sich " +
@@ -74,7 +76,9 @@ class OnboardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         buildUi()
         show(0)
-        onBackPressedDispatcher.addCallback(this) { if (index > 0) show(index - 1) else finishOnboarding() }
+        // Zurück auf dem ersten Schritt schließt den Assistenten, ohne ihn als erledigt zu
+        // merken – beim nächsten Start erscheint er dann wieder.
+        onBackPressedDispatcher.addCallback(this) { if (index > 0) show(index - 1) else finish() }
     }
 
     private fun buildUi() {

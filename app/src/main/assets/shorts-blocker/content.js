@@ -10,7 +10,8 @@
 (() => {
   "use strict";
 
-  // /shorts/ID, /shorts sowie Kanal-Tabs wie /@name/shorts
+  // /shorts/ID, /shorts sowie Kanal-Tabs wie /@name/shorts.
+  // Gleiche Regel steht als shortsPath in MainActivity.kt (UrlRules) – beide gleich halten!
   const SHORTS_PATH = /^\/(shorts(\/|$)|(@[^/]+|c\/[^/]+|channel\/[^/]+|user\/[^/]+)\/shorts\/?$)/;
 
   // Container, die als Ganzes verschwinden sollen, wenn sie einen Shorts-Link enthalten

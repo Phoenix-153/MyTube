@@ -35,6 +35,19 @@ Hinweis: verstößt gegen die YouTube-Nutzungsbedingungen.
 - Übernimmt YouTube-Links (youtube.com, youtu.be) und „Teilen → MyTube“
 - Deep Link `mytube://open` (optional `?url=…`)
 
+## Funktionen wie in der YouTube-App
+- **Teilen**: YouTubes Teilen-Knopf öffnet das Android-Teilen-Menü
+- **Pull-to-refresh**: ganz oben nach unten ziehen lädt neu (nicht auf der Videoseite)
+- **Sprachsuche**: Mikrofon-Knopf in der Kopfzeile → Android-Spracheingabe → YouTube-Suche
+- **Miniplayer**: zwei Tabs (GeckoSessions) – Stöbern und Video. Videos laufen ganz
+  normal im Stöber-Tab (sofortiger Start). Sobald eins läuft, lädt der versteckte
+  Video-Tab es pausiert vor. Nach unten wischen über dem Video oder Zurück: Der
+  Stöber-Tab geht zurück, der Video-Tab spielt an derselben Stelle in einer schwebenden
+  Karte unten rechts weiter (Pause, Schließen, Titel, Fortschrittsbalken). Die Karte
+  lässt sich in jede Ecke ziehen; seitlich hinauswischen schließt; antippen vergrößert.
+  Kanal- und Suchlinks aus dem vergrößerten Video öffnen im Stöber-Tab. Es läuft immer
+  nur ein Video.
+
 ## Weitergabe
 - APKs als **GitHub Releases** in diesem (öffentlichen) Repo
 - Die App prüft einmal täglich auf eine neue Version und bietet das Update an
@@ -44,4 +57,6 @@ Hinweis: verstößt gegen die YouTube-Nutzungsbedingungen.
 - Eigener Name und eigenes Icon, kein YouTube-Logo (Markenrecht)
 
 ## Vorerst nicht dabei
-Einstellungen, Management-Webapp, Hintergrundwiedergabe, Bild-im-Bild.
+Einstellungen, Management-Webapp, Hintergrundwiedergabe, Bild-im-Bild, Uploads.
+Nicht machbar bzw. gegen das Konzept: Chromecast, Benachrichtigungen bei neuen Videos,
+Offline-Downloads.

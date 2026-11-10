@@ -28,11 +28,32 @@ class App : Application() {
         GeckoRuntime.create(this, settings).also { setUpExtensions(it) }
     }
 
+    private var ownExtensionReady = false
+    private var ownExtension: WebExtension? = null
+    private val extensionWaiters = mutableListOf<(WebExtension?) -> Unit>()
+
+    /**
+     * Ruft [block] auf, sobald die eigene Erweiterung geladen ist (sofort, falls schon fertig).
+     * Konnte sie nicht geladen werden, kommt null – die App funktioniert dann ohne Zusatzfunktionen.
+     */
+    fun withOwnExtension(block: (WebExtension?) -> Unit) {
+        if (ownExtensionReady) block(ownExtension) else extensionWaiters.add(block)
+    }
+
+    private fun ownExtensionLoaded(ext: WebExtension?) {
+        ownExtensionReady = true
+        ownExtension = ext
+        extensionWaiters.forEach { it(ext) }
+        extensionWaiters.clear()
+    }
+
     private fun setUpExtensions(runtime: GeckoRuntime) {
         val controller = runtime.webExtensionController
 
-        // Installationen ohne Rückfrage erlauben. Es werden nur die zwei Erweiterungen
-        // installiert, die die App selbst anstößt – der Nutzer kann keine anderen hinzufügen.
+        // Installation und Updates von uBlock Origin ohne Rückfrage erlauben (die eingebaute
+        // Erweiterung läuft nicht über diesen Delegate). Andere Erweiterungen kommen nicht
+        // hinein: Installationen sind nur von addons.mozilla.org erlaubt (GeckoView-Vorgabe),
+        // und diese Seite lässt sich in der App gar nicht öffnen (UrlRules.isAllowedInApp).
         controller.promptDelegate = object : WebExtensionController.PromptDelegate {
             override fun onInstallPromptRequest(
                 extension: WebExtension,
@@ -50,9 +71,19 @@ class App : Application() {
             ): GeckoResult<AllowOrDeny> = GeckoResult.allow()
         }
 
-        // 1) Eigener Shorts-Blocker, liegt in app/src/main/assets/shorts-blocker/
-        controller.ensureBuiltIn(SHORTS_BLOCKER_URI, SHORTS_BLOCKER_ID)
-            .accept({}, { Log.e(TAG, "Shorts-Blocker konnte nicht geladen werden", it) })
+        // 1) Eigene Erweiterung (Shorts-Blocker + Zusatzfunktionen), liegt in
+        //    app/src/main/assets/shorts-blocker/. Die Activity braucht das Objekt, um
+        //    Nachrichten der Erweiterung (z. B. "Sprachsuche starten") zu empfangen.
+        //    WICHTIG: Nach jeder Änderung an der Erweiterung "version" in ihrer manifest.json
+        //    erhöhen – ensureBuiltIn installiert sie nur bei neuer Version neu.
+        //    Ordner und ID heißen aus historischen Gründen noch "shorts-blocker"; eine neue ID
+        //    würde bei bestehenden Installationen eine zweite Kopie danebenlegen.
+        controller.ensureBuiltIn(SHORTS_BLOCKER_URI, SHORTS_BLOCKER_ID).accept(
+            { ext -> ownExtensionLoaded(ext) },
+            { e ->
+                Log.e(TAG, "Eigene Erweiterung konnte nicht geladen werden", e)
+                ownExtensionLoaded(null)
+            })
 
         // 2) uBlock Origin (Werbeblocker): beim ersten Start aus dem Firefox-Add-on-Store
         //    installieren, danach höchstens einmal täglich aktualisieren (Filterlisten

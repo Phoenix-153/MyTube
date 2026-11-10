@@ -33,3 +33,12 @@ yt-tab-shape[tab-title="Shorts"],
 .single-column-browse-results-tabs a[href$="/shorts"] {
   display: none !important;
 }
+
+/*
+ * Darstellung wie in der YouTube-App: Der "Ambient-Modus" (weichgezeichnete Videofarben
+ * hinter dem Player) ist auf m.youtube.com viel stärker als in der App. Hier deutlich
+ * abschwächen. Ganz ausschalten: opacity auf 0 setzen.
+ */
+#player-cinematics-container {
+  opacity: 0.3 !important;
+}

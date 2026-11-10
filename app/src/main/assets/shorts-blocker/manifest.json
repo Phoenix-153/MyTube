@@ -1,16 +1,17 @@
 {
   "manifest_version": 2,
-  "name": "MyTube Shorts-Blocker",
-  "version": "1.0",
-  "description": "Blendet YouTube Shorts aus und verhindert Klicks darauf.",
+  "name": "MyTube-Erweiterung",
+  "version": "1.10",
+  "description": "Blendet YouTube Shorts aus und ergänzt App-Funktionen: Neuladen durch Ziehen, Sprachsuche, Verteilung der Links auf Stöber- und Video-Tab, Miniplayer.",
   "browser_specific_settings": {
     "gecko": { "id": "shorts-blocker@mytube" }
   },
+  "permissions": ["nativeMessaging", "nativeMessagingFromContent", "geckoViewAddons"],
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
       "css": ["content.css"],
-      "js": ["content.js"],
+      "js": ["content.js", "features.js"],
       "run_at": "document_start"
     }
   ]
